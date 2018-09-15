@@ -117,7 +117,7 @@ namespace AutoChecker
             {
                 validRooms = validRooms.Where(x => !x.Styles.Except(ConfigReader.StyleList).Any());
             }
-            return validRooms;
+            return rooms;
         }
     }
 
