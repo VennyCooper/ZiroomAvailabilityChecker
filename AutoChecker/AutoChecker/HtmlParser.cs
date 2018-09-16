@@ -38,9 +38,18 @@ namespace AutoChecker
             
         }
 
-        public IEnumerable<RoomInfo> GetValidRooms()
+        public RoomInfo[] GetValidRooms()
         {
-            var allRooms = GetRoomInfo();
+            RoomInfo[] allRooms = null;
+            try
+            {
+                allRooms = GetRoomInfo().ToArray();
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLine(e.ToString());
+                throw e;
+            }
             return FilterRooms(allRooms);
         }
 
@@ -60,11 +69,16 @@ namespace AutoChecker
         private Stream GetPageHtml(string uri)
         {
             Stream htmlStream = null;
-            using (WebClient webClient = new WebClient())
+            WebClient webClient = new WebClient();
+            try
             {
                 htmlStream = webClient.OpenRead(uri);
             }
-            
+            catch (Exception e)
+            {
+                Logger.WriteLine(e.ToString());
+                throw e;
+            }
             return htmlStream;
         }
 
@@ -104,7 +118,12 @@ namespace AutoChecker
             }
         }
 
-        private IEnumerable<RoomInfo> FilterRooms(IEnumerable<RoomInfo> rooms)
+        /// <summary>
+        /// Filter all rooms using conditions in the config, to get valid ones
+        /// </summary>
+        /// <param name="rooms">all rooms</param>
+        /// <returns>valid rooms</returns>
+        private RoomInfo[] FilterRooms(IEnumerable<RoomInfo> rooms)
         {
             var validRooms = rooms
                 .Where(x => !ConfigReader.ImgExclusion.Equals(x.Img))
@@ -115,39 +134,9 @@ namespace AutoChecker
             }
             if (ConfigReader.StyleList.Count != 0)
             {
-                validRooms = validRooms.Where(x => !x.Styles.Except(ConfigReader.StyleList).Any());
+                validRooms = validRooms.Where(x => !ConfigReader.StyleList.Except(x.Styles).Any());
             }
-            return rooms;
-        }
-    }
-
-
-    class RoomInfo
-    {
-        public string Name { get; private set; } = string.Empty;
-        public string Location { get; private set; } = string.Empty;
-        public string Img { get; private set; } = string.Empty;
-        public double Area { get; private set; } = 0;
-        public string Floor { get; private set; } = string.Empty;
-        public string Structure { get; private set; } = string.Empty;
-        public List<string> Styles { get; private set; } = null;
-
-        public RoomInfo(
-            string name, 
-            string location, 
-            string img, 
-            double area, 
-            string floor, 
-            string structure, 
-            List<string> styles)
-        {
-            Name = name;
-            Location = location;
-            Img = img;
-            Area = area;
-            Floor = floor;
-            Structure = structure;
-            Styles = styles;
+            return validRooms.ToArray();
         }
     }
 }

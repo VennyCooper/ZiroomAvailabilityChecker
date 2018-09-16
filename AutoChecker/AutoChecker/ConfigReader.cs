@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 
 namespace AutoChecker
@@ -26,6 +27,10 @@ namespace AutoChecker
         public static string Password { get; private set; } = string.Empty;
         // Email recipient
         public static List<string> RecipientList { get; private set; } = new List<string>();
+        // Result folder path
+        public static string ResultDir { get; private set; } = string.Empty;
+        // Timer interval (ms)
+        public static double TimerInterval { get; private set; } = 0;
 
         /// <summary>
         /// Load config from XML 
@@ -63,7 +68,12 @@ namespace AutoChecker
             {
                 RecipientList.Add(recipientNode.InnerText.Trim());
             }
-
+            // Retrieve result folder path
+            ResultDir = xmlDoc.SelectSingleNode("Root/Output/ResultFolder").Attributes["path"].Value.Trim();
+            Directory.CreateDirectory(ResultDir);
+            // Retrieve timer interval in ms as double
+            TimerInterval = double.Parse(xmlDoc.SelectSingleNode("Root/Timer").Attributes["interval"].Value.Trim());
+            Logger.WriteLine("[Done] Load config");
         }
     }
 }
