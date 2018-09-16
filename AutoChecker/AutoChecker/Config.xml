@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <Page uri="http://www.ziroom.com/z/nl/z2.html?qwd=%E9%87%91%E9%9B%85%E5%9B%AD">
+    <Filter>
+      <ImgExclusion src="//image.ziroom.com/g2m1/M00/6E/A5/ChAFB1uJCTmAH42GAAAm7Uqn2k8066.jpg"/>
+      <Orientation direction=""/>
+      <Area Min="10" Max=""/>
+      <Styles>
+        <Style>集体供暖</Style>
+        <Style>离地铁近</Style>
+      </Styles>
+    </Filter>
+  </Page>
+  <Email>
+    <Account server="pop-mail.outlook.com">
+      <Username></Username>
+      <Password></Password>
+    </Account>
+    <Recipients>
+      <Recipient></Recipient>
+    </Recipients>
+  </Email>
+  <Output>
+    <ResultFolder path="C:\Users\Wenqi\Desktop\ZiroomChecker\Result"/>
+  </Output>
+  <Timer interval="1200000"/>
+</Root>
